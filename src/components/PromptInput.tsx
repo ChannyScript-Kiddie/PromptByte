@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Terminal, Zap } from 'lucide-react';
 
 interface PromptInputProps {
   onSubmit: (prompt: string) => void;
@@ -20,69 +19,70 @@ export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
   };
 
   const examplePrompts = [
-    "Create a responsive navigation bar with hamburger menu",
-    "Generate a modern hero section with gradient background",
-    "Build a contact form with validation",
-    "Make a pricing cards component",
-    "Create a responsive image gallery with lightbox"
+    "responsive navbar with dropdown",
+    "card component with hover effects", 
+    "contact form with validation",
+    "image gallery grid",
+    "dark mode toggle button"
   ];
 
-  return (
-    <Card className="w-full">
-      <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="prompt" className="block text-sm font-medium mb-2">
-              Describe the code you want to generate
-            </label>
-            <Textarea
-              id="prompt"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="e.g., Create a responsive navbar with dropdown menu..."
-              className="min-h-[120px] resize-none font-mono"
-              disabled={loading}
-            />
-          </div>
-          
-          <Button 
-            type="submit" 
-            variant="generate" 
-            className="w-full" 
-            disabled={!prompt.trim() || loading}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4" />
-                Generate Code
-              </>
-            )}
-          </Button>
-        </form>
+  const handleExampleClick = (example: string) => {
+    setPrompt(example);
+  };
 
-        <div className="mt-6">
-          <p className="text-xs text-muted-foreground mb-3">Try these examples:</p>
-          <div className="flex flex-wrap gap-2">
-            {examplePrompts.map((example, index) => (
-              <Button
-                key={index}
-                variant="code"
-                size="sm"
-                onClick={() => setPrompt(example)}
-                disabled={loading}
-                className="text-xs"
-              >
-                {example}
-              </Button>
-            ))}
+  return (
+    <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="relative">
+          <div className="absolute top-2 left-3 text-primary font-mono text-sm">
+            <Terminal className="w-4 h-4 inline mr-1" />
+            $&gt;
           </div>
+          <Textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter command... (e.g., 'responsive navbar with dropdown')"
+            className="min-h-[100px] bg-input/50 border-primary/30 focus:border-primary font-mono pl-14 pt-2 text-foreground placeholder:text-muted-foreground backdrop-blur-sm"
+            disabled={loading}
+          />
         </div>
-      </CardContent>
-    </Card>
+        
+        <Button 
+          type="submit" 
+          disabled={loading || !prompt.trim()}
+          className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-mono tracking-wider border border-primary/50 hover:shadow-glow-primary transition-smooth"
+        >
+          {loading ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground mr-2" />
+              PROCESSING...
+            </>
+          ) : (
+            <>
+              <Zap className="w-4 h-4 mr-2" />
+              EXECUTE
+            </>
+          )}
+        </Button>
+      </form>
+
+      <div className="space-y-2">
+        <p className="text-sm text-accent font-mono">&gt; Quick commands:</p>
+        <div className="flex flex-wrap gap-2">
+          {examplePrompts.map((example, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              onClick={() => handleExampleClick(example)}
+              className="text-xs font-mono bg-secondary/30 border-accent/30 text-accent hover:bg-accent/10 hover:border-accent transition-smooth"
+              disabled={loading}
+            >
+              {example}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };

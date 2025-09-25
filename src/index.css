@@ -2,65 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Code Snippet Generator - Developer-focused design system */
+/* PromptByte - Hacker Terminal Theme */
 
 @layer base {
   :root {
-    /* Dark code editor theme */
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
+    /* Matrix-inspired dark theme */
+    --background: 0 0% 4%;
+    --foreground: 120 100% 80%;
 
-    --card: 222 84% 7%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 6%;
+    --card-foreground: 120 100% 80%;
 
-    --popover: 222 84% 7%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 120 100% 80%;
 
-    /* Accent blue for code highlights */
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 84% 5%;
+    /* Electric green accent */
+    --primary: 120 100% 50%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 120 100% 80%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 32% 65%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 120 50% 60%;
 
-    --accent: 142 76% 36%;
-    --accent-foreground: 355 7% 97%;
+    --accent: 60 100% 50%;
+    --accent-foreground: 0 0% 4%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 217 91% 60%;
+    --border: 120 50% 20%;
+    --input: 0 0% 8%;
+    --ring: 120 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Code syntax highlighting colors */
-    --code-bg: 222 84% 6%;
-    --code-keyword: 286 60% 67%;
-    --code-string: 142 76% 36%;
-    --code-number: 42 89% 61%;
-    --code-comment: 215 20% 65%;
-    --code-function: 217 91% 60%;
-    --code-variable: 355 85% 71%;
+    /* Terminal syntax highlighting */
+    --code-bg: 0 0% 3%;
+    --code-keyword: 300 100% 70%;
+    --code-string: 120 100% 50%;
+    --code-number: 60 100% 50%;
+    --code-comment: 120 50% 40%;
+    --code-function: 180 100% 50%;
+    --code-variable: 0 100% 70%;
 
-    /* Gradients and effects */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(217 91% 80%));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(142 76% 50%));
-    --glow-primary: 0 0 20px hsl(var(--primary) / 0.3);
-    --glow-accent: 0 0 20px hsl(var(--accent) / 0.3);
+    /* Hacker-style effects */
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 30%), hsl(120 100% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(60 100% 40%), hsl(60 100% 60%));
+    --glow-primary: 0 0 30px hsl(120 100% 50% / 0.5), 0 0 60px hsl(120 100% 50% / 0.3);
+    --glow-accent: 0 0 30px hsl(60 100% 50% / 0.5);
+    --text-shadow: 0 0 10px hsl(120 100% 50% / 0.8);
 
-    --sidebar-background: 222 84% 4%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 222 84% 5%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 120 100% 80%;
+    --sidebar-primary: 120 100% 50%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 120 100% 80%;
+    --sidebar-border: 120 50% 20%;
+    --sidebar-ring: 120 100% 50%;
   }
 }
 
@@ -71,34 +72,91 @@
 
   body {
     @apply bg-background text-foreground font-mono;
+    background: radial-gradient(ellipse at center, hsl(120 100% 2% / 0.8) 0%, hsl(0 0% 4%) 70%);
+    min-height: 100vh;
+  }
+
+  /* Hacker terminal styling */
+  .terminal-text {
+    text-shadow: var(--text-shadow);
+  }
+
+  .glitch-text {
+    animation: glitch 0.3s linear infinite;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
   }
 
   /* Code block styling */
   .code-block {
     @apply bg-card border border-border rounded-lg p-4 font-mono text-sm overflow-x-auto;
     box-shadow: var(--glow-primary);
+    border: 1px solid hsl(120 100% 30%);
   }
 
   /* Syntax highlighting classes */
-  .token.keyword { color: hsl(var(--code-keyword)); }
-  .token.string { color: hsl(var(--code-string)); }
-  .token.number { color: hsl(var(--code-number)); }
+  .token.keyword { color: hsl(var(--code-keyword)); text-shadow: 0 0 5px hsl(var(--code-keyword) / 0.8); }
+  .token.string { color: hsl(var(--code-string)); text-shadow: 0 0 5px hsl(var(--code-string) / 0.8); }
+  .token.number { color: hsl(var(--code-number)); text-shadow: 0 0 5px hsl(var(--code-number) / 0.8); }
   .token.comment { color: hsl(var(--code-comment)); }
-  .token.function { color: hsl(var(--code-function)); }
-  .token.variable { color: hsl(var(--code-variable)); }
+  .token.function { color: hsl(var(--code-function)); text-shadow: 0 0 5px hsl(var(--code-function) / 0.8); }
+  .token.variable { color: hsl(var(--code-variable)); text-shadow: 0 0 5px hsl(var(--code-variable) / 0.8); }
 
-  /* Custom animations */
+  /* Hacker animations */
   @keyframes pulse-glow {
     0%, 100% { box-shadow: var(--glow-primary); }
-    50% { box-shadow: var(--glow-primary), 0 0 40px hsl(var(--primary) / 0.5); }
+    50% { box-shadow: var(--glow-primary), 0 0 60px hsl(120 100% 50% / 0.6); }
+  }
+
+  @keyframes matrix-rain {
+    0% { transform: translateY(-100vh); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
   }
 
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
+  .matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.1;
+  }
+
   /* Smooth transitions */
   .transition-smooth {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Scanner line effect */
+  @keyframes scanner {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+
+  .scanner-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(120 100% 50%), transparent);
+    animation: scanner 3s linear infinite;
+    z-index: 1000;
+    pointer-events: none;
   }
 }

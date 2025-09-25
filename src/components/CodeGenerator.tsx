@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { CodeDisplay } from './CodeDisplay';
 import { PromptInput } from './PromptInput';
-import { APIKeyInput } from './APIKeyInput';
+import { CodeDisplay } from './CodeDisplay';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface GeneratedCode {
   code: string;
@@ -11,95 +11,33 @@ interface GeneratedCode {
 }
 
 export const CodeGenerator = () => {
-  const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<GeneratedCode | null>(null);
   const { toast } = useToast();
 
   const generateCode = async (prompt: string) => {
-    if (!apiKey.trim()) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your OpenAI API key first.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setLoading(true);
     
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a skilled web developer assistant. Generate clean, modern, and responsive code based on user requests. 
-
-Rules:
-1. Always return ONLY the code without explanations or markdown formatting
-2. Use modern best practices (HTML5, CSS3, ES6+, React hooks)
-3. Make code responsive and accessible
-4. Use semantic HTML elements
-5. Include proper CSS styling with modern techniques (flexbox, grid, etc.)
-6. For React components, use functional components with hooks
-7. Don't include import statements unless specifically requested
-8. Focus on clean, readable, and maintainable code`
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          max_tokens: 2000,
-          temperature: 0.7,
-        }),
+      const { data, error } = await supabase.functions.invoke('generate-code', {
+        body: { prompt }
       });
 
-      if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
+      if (error) {
+        throw error;
       }
 
-      const data = await response.json();
-      const code = data.choices[0]?.message?.content || '';
+      setGeneratedCode(data);
       
-      // Detect language based on code content
-      let language = 'javascript';
-      let title = 'Generated Code';
-      
-      if (code.includes('<!DOCTYPE') || code.includes('<html')) {
-        language = 'html';
-        title = 'HTML Code';
-      } else if (code.includes('function') || code.includes('const ') || code.includes('React')) {
-        language = 'javascript';
-        title = 'JavaScript/React Code';
-      } else if (code.includes('{') && code.includes('}') && (code.includes('color:') || code.includes('margin:'))) {
-        language = 'css';
-        title = 'CSS Code';
-      }
-
-      setGeneratedCode({
-        code: code.trim(),
-        language,
-        title
-      });
-
       toast({
-        title: "Code Generated Successfully!",
-        description: "Your code snippet is ready to use.",
+        title: "Code Generated!",
+        description: "Your code snippet has been generated successfully.",
       });
-
     } catch (error) {
       console.error('Error generating code:', error);
       toast({
         title: "Generation Failed",
-        description: "Failed to generate code. Please check your API key and try again.",
+        description: "Failed to generate code. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -108,29 +46,63 @@ Rules:
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          AI Code Snippet Generator
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Generate HTML, CSS, JavaScript, and React code snippets using AI. 
-          Just describe what you want to build and get clean, modern code instantly.
-        </p>
+    <div className="min-h-screen bg-background p-6 relative overflow-hidden">
+      {/* Scanner line effect */}
+      <div className="scanner-line" />
+      
+      {/* Matrix background effect */}
+      <div className="matrix-bg">
+        <div className="absolute inset-0 opacity-10">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-px h-full bg-gradient-to-b from-transparent via-primary to-transparent"
+              style={{
+                left: `${i * 5}%`,
+                animationDelay: `${i * 0.1}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <APIKeyInput apiKey={apiKey} onApiKeyChange={setApiKey} />
-          <PromptInput onSubmit={generateCode} loading={loading} />
+      <div className="max-w-6xl mx-auto space-y-8 relative z-10">
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-bold terminal-text text-primary glitch-text">
+            &gt; PROMPTBYTE_
+          </h1>
+          <div className="text-xl text-foreground font-mono">
+            <span className="text-accent">[SYSTEM]</span> AI Code Generator Online
+          </div>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-mono">
+            <span className="text-primary">&gt;</span> Neural network activated. Input prompt to generate code.
+            <br />
+            <span className="text-accent">&gt;</span> HTML | CSS | JavaScript | React supported.
+          </p>
         </div>
-        
-        <div>
-          <CodeDisplay 
-            code={generatedCode?.code || ''} 
-            language={generatedCode?.language || 'javascript'}
-            title={generatedCode?.title}
-          />
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div className="bg-card/50 border border-primary/30 rounded-lg p-4 backdrop-blur-sm">
+              <div className="text-sm text-primary font-mono mb-2">
+                <span className="text-accent">[INPUT_MODULE]</span> Ready for commands...
+              </div>
+              <PromptInput onSubmit={generateCode} loading={loading} />
+            </div>
+          </div>
+          
+          <div className="lg:sticky lg:top-6">
+            <div className="bg-card/50 border border-primary/30 rounded-lg backdrop-blur-sm">
+              <div className="text-sm text-primary font-mono p-4 border-b border-primary/30">
+                <span className="text-accent">[OUTPUT_TERMINAL]</span> Generated code will appear here...
+              </div>
+              <CodeDisplay 
+                code={generatedCode?.code || ''} 
+                language={generatedCode?.language || 'javascript'}
+                title={generatedCode?.title}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
