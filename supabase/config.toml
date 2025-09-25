@@ -1,4 +1,0 @@
-project_id = "zkjagiklgrbuvbetqsmz"
-
-[functions.generate-code]
-verify_jwt = false

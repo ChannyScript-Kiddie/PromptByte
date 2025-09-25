@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Terminal, Zap } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Terminal, Zap } from "lucide-react";
 
 interface PromptInputProps {
   onSubmit: (prompt: string) => void;
@@ -9,7 +9,7 @@ interface PromptInputProps {
 }
 
 export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,10 +20,10 @@ export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
 
   const examplePrompts = [
     "responsive navbar with dropdown",
-    "card component with hover effects", 
+    "card component with hover effects",
     "contact form with validation",
     "image gallery grid",
-    "dark mode toggle button"
+    "dark mode toggle button",
   ];
 
   const handleExampleClick = (example: string) => {
@@ -34,21 +34,17 @@ export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
     <div className="space-y-4">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
-          <div className="absolute top-2 left-3 text-primary font-mono text-sm">
-            <Terminal className="w-4 h-4 inline mr-1" />
-            $&gt;
-          </div>
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter command... (e.g., 'responsive navbar with dropdown')"
-            className="min-h-[100px] bg-input/50 border-primary/30 focus:border-primary font-mono pl-14 pt-2 text-foreground placeholder:text-muted-foreground backdrop-blur-sm"
+            placeholder="Example: responsive navbar with dropdown"
+            className="min-h-[100px] bg-input/50 border-primary/30 focus:border-primary font-mono pt-2 text-foreground placeholder:text-muted-foreground backdrop-blur-sm"
             disabled={loading}
           />
         </div>
-        
-        <Button 
-          type="submit" 
+
+        <Button
+          type="submit"
           disabled={loading || !prompt.trim()}
           className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-mono tracking-wider border border-primary/50 hover:shadow-glow-primary transition-smooth"
         >
