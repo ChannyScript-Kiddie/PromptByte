@@ -6,13 +6,21 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth.tsx";
 
 const queryClient = new QueryClient();
 
 function Protected({ children }: { children: JSX.Element }) {
-  const { session } = useAuth();
-  if (!session) return <Navigate to="/login" replace />;
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a spinner component
+  }
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
   return children;
 }
 
