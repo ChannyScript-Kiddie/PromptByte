@@ -37,7 +37,7 @@ export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Example: responsive navbar with dropdown"
+            placeholder="Example: give me a header of a website"
             className="min-h-[100px] bg-input/50 border-primary/30 focus:border-primary font-mono pt-2 text-foreground placeholder:text-muted-foreground backdrop-blur-sm"
             disabled={loading}
           />
