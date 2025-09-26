@@ -6,9 +6,24 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 import { useAuth } from "@/hooks/useAuth.tsx";
 
 const queryClient = new QueryClient();
+
+function PublicRoute({ children }: { children: JSX.Element }) {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (session) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
 
 function Protected({ children }: { children: JSX.Element }) {
   const { session, loading } = useAuth();
@@ -31,12 +46,27 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
           <Route
             path="/"
             element={
               <Protected>
                 <Index />
+              </Protected>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Protected>
+                <Profile />
               </Protected>
             }
           />
