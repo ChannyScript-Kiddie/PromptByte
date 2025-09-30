@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# PromptByte
 
-## Project info
+**PromptByte** is a smart boilerplate code generator that converts natural language descriptions into production-ready, responsive UI components. It eliminates repetitive coding tasks, enabling developers to focus on application logic, rapid prototyping, and consistent UI standards.
 
-**URL**: https://lovable.dev/projects/0c2881dd-e14e-403c-b396-718b3979bea8
+---
 
-## How can I edit this code?
+PromptByte generates **production-ready, responsive, and accessible UI components** from simple English descriptions, removing repetitive coding and enabling developers to focus on unique functionality.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## Core Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0c2881dd-e14e-403c-b396-718b3979bea8) and start prompting.
+1. **Natural Language Component Generator**
 
-Changes made via Lovable will be committed automatically to this repo.
+   - Converts simple English descriptions into complete UI components.
+   - Recognizes common patterns like navigation bars, hero sections, login forms, product cards, footers, modals, alerts, etc.
+   - Applies smart default settings for spacing, colors, and typography.
 
-**Use your preferred IDE**
+2. **Multi-Framework Boilerplate Support**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+   - React Components with modern hooks
+   - Vanilla HTML/CSS/JS implementation
+   - Framework-agnostic design for consistency across projects
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Production-Ready Code Quality**
 
-Follow these steps:
+   - Responsive design for mobile, tablet, and desktop
+   - Accessibility built-in (ARIA, semantic HTML, keyboard navigation)
+   - Modern CSS with Flexbox/Grid
+   - Clean and maintainable code structure
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. **Rapid Prototyping Tools**
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+   - One-click copy to clipboard
+   - One-click download as text file
 
-# Step 3: Install the necessary dependencies.
-npm i
+5. **Smart Defaults and Best Practices**
+   - Modern design standards (spacing, typography, colors)
+   - Performance-optimized code
+   - SEO-friendly semantic HTML
+   - Maintenance-ready structure
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## Getting Started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Prerequisites
 
-**Use GitHub Codespaces**
+- Node.js (>=18.x)
+- npm or yarn
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Installation
 
-## What technologies are used for this project?
+- git clone https://github.com/ChannyScript-Kiddie/PromptByte.git
+- cd PromptByte
+- npm install
+- npm run dev
 
-This project is built with:
+Visit http://localhost:5173 to see the app in action.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0c2881dd-e14e-403c-b396-718b3979bea8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+License
+PromptByte © 2025

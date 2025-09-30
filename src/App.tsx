@@ -17,11 +17,9 @@ function PublicRoute({ children }: { children: JSX.Element }) {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   if (session) {
     return <Navigate to="/" replace />;
   }
-
   return children;
 }
 
@@ -29,7 +27,7 @@ function Protected({ children }: { children: JSX.Element }) {
   const { session, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner component
+    return <div>Loading...</div>;
   }
 
   if (!session) {
