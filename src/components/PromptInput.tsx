@@ -19,11 +19,11 @@ export const PromptInput = ({ onSubmit, loading }: PromptInputProps) => {
   };
 
   const examplePrompts = [
-    "responsive navbar with dropdown",
+    "function to find Odd number in python",
     "card component with hover effects",
-    "contact form with validation",
-    "image gallery grid",
-    "dark mode toggle button",
+    "Responsive header in React.js",
+    "Responsive footer",
+    "button with hover effects",
   ];
 
   const handleExampleClick = (example: string) => {

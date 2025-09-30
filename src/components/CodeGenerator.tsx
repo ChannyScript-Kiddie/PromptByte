@@ -57,7 +57,7 @@ export const CodeGenerator = () => {
             Your sole purpose is to convert user requests into clean, functional code.
             You MUST respond ONLY with the complete, modern, and ready-to-use code block.
             Do NOT include any explanatory text, comments, or JSON wrappers.
-            Always provide a complete, valid code block for the requested language.`,
+            Always respond with only valid code in the requested language. Do not add explanations, prose, or JSON wrappers.`,
             },
           ],
         };
@@ -103,9 +103,15 @@ export const CodeGenerator = () => {
           );
         }
 
+        // --- Make the output format better
+        const cleanCode = content
+          .replace(/```[a-z]*\n?/gi, "")
+          .replace(/```$/gi, "")
+          .trim();
+
         const language = detectLanguage(prompt);
         const result = {
-          code: content,
+          code: cleanCode,
           language,
           title: `Generated ${language.toUpperCase()} Code`,
         };
@@ -139,7 +145,9 @@ export const CodeGenerator = () => {
       return "jsx";
     if (lowerPrompt.includes("javascript") || lowerPrompt.includes("js"))
       return "javascript";
-    return "html";
+    if (lowerPrompt.includes("python") || lowerPrompt.includes("py"))
+      return "python";
+    return "html"; //fallbacks
   };
 
   // Reset output when switching modes or clearing input
@@ -183,7 +191,7 @@ export const CodeGenerator = () => {
             code.
             <br />
             <span className="text-accent"></span> HTML | CSS | JavaScript |
-            React.Js supported.
+            React.Js | Python supported
           </p>
         </div>
 

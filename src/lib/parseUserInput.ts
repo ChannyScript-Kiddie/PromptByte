@@ -4,55 +4,11 @@ const COMPONENT_SYNONYMS = {
   footer: ["footer", "bottom bar", "foot"],
   card: ["card", "panel", "box"],
   navbar: ["navbar", "navigation", "menu", "nav"],
-};
-
-// Common property patterns that could appear in any component
-const PROPERTY_PATTERNS = {
-  text: [
-    // Matches: "with text Hello", "text: Hello", "saying Hello"
-    {
-      pattern: /(?:with\s+)?text\s*[:=]?\s*["']?([^"',]+)["']?/i,
-      prop: "text",
-    },
-    { pattern: /saying\s+["']?([^"',]+)["']?/i, prop: "text" },
-    { pattern: /labeled\s+["']?([^"',]+)["']?/i, prop: "text" },
-  ],
-  title: [
-    // Matches: "with title Hello", "titled Hello", "called Hello"
-    {
-      pattern: /(?:with\s+)?title\s*[:=]?\s*["']?([^"',]+)["']?/i,
-      prop: "title",
-    },
-    { pattern: /titled\s+["']?([^"',]+)["']?/i, prop: "title" },
-    { pattern: /called\s+["']?([^"',]+)["']?/i, prop: "title" },
-  ],
-  color: [
-    // Matches: "in red", "red button", "color: blue"
-    {
-      pattern:
-        /(?:in|with|color:?\s+)(red|blue|green|yellow|purple|orange|gray|black|white)/i,
-      prop: "color",
-    },
-  ],
-  size: [
-    // Matches: "large button", "small card", "size: medium"
-    {
-      pattern: /(?:size:?\s+)?(small|medium|large|xs|sm|md|lg|xl)/i,
-      prop: "size",
-    },
-  ],
-  items: [
-    // Matches: "with items Home, About", "containing X, Y, Z"
-    {
-      pattern: /(?:with items|containing|menu:?)\s+([^.]+)/i,
-      prop: "items",
-      transform: (match) =>
-        match
-          .split(/,|\sand\s/)
-          .map((item) => item.trim())
-          .filter(Boolean),
-    },
-  ],
+  popup: ["popup", "screen popup"],
+  alert: ["alert", "warning", "notification"],
+  hero: ["hero section", "hero"],
+  sidebar: ["sidebar", "sidebar navigation", "sidebar menu"],
+  login: ["login form", "login", "signup form", "signup"],
 };
 
 export function parseUserInput(prompt: string): {
@@ -79,17 +35,6 @@ export function parseUserInput(prompt: string): {
       }
     }
   }
-
-  // Dynamic property detection
-  Object.entries(PROPERTY_PATTERNS).forEach(([key, patterns]) => {
-    patterns.forEach(({ pattern, prop, transform }) => {
-      const match = prompt.match(pattern);
-      if (match) {
-        const value = transform ? transform(match[1]) : match[1];
-        props[prop] = value;
-      }
-    });
-  });
 
   // Handle styles as boolean flags
   const STYLES = ["rounded", "centered", "shadow", "bold", "italic"];

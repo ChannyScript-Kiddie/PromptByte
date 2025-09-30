@@ -33,8 +33,8 @@ export default function ComponentFetcher({ name, props = {} }) {
   if (!component) {
     return (
       <div className="p-4 text-muted-foreground">
-        I couldn’t find that. Available components: header, navbar, button,
-        footer.
+        Sorry this componet will be avaiable soon!!! Please try out another
+        component
       </div>
     );
   }
