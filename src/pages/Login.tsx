@@ -36,9 +36,9 @@ export default function Login() {
       }
     } catch (err: any) {
       toast({
-        title: "Auth failed",
-        description: err?.message || "Unknown error",
-        variant: "destructive",
+        title: "Waiting for Confirmation",
+        description:
+          "We've sent you a confirmation link to activate your account.",
       });
     } finally {
       setSubmitting(false);
