@@ -62,7 +62,7 @@ export const CodeGenerator = () => {
           ],
         };
 
-        const STABLE_MODEL_ALIAS = "gemini-2.5-flash";
+        const STABLE_MODEL_ALIAS = "gemini-2.5-pro";
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/${STABLE_MODEL_ALIAS}:generateContent?key=${apiKey}`,
