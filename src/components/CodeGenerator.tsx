@@ -5,6 +5,9 @@ import { useToast } from "@/hooks/use-toast";
 import ComponentFetcher from "./ComponentFetcher.jsx";
 import { parseUserInput } from "@/lib/parseUserInput";
 import { fetchComponentByName } from "@/integrations/supabase/supabaseClient";
+import { Sidebar } from "./Sidebar";
+import { useAuth } from "@/hooks/useAuth";
+import { storePrompt } from "@/integrations/supabase/promptHistory";
 
 export const CodeGenerator = () => {
   const [mode, setMode] = useState("PromptByte 1.0");
@@ -15,20 +18,26 @@ export const CodeGenerator = () => {
     language: "bash",
   });
   const { toast } = useToast();
-  // For PromptByte 2.0: store last parsed result
-  const [dbComponentName, setDbComponentName] = useState<string>("");
-  const [dbComponentProps, setDbComponentProps] = useState<Record<string, any>>(
-    {}
-  );
-  // Error state for PromptByte 2.0
-  const [dbComponentError, setDbComponentError] = useState<string>("");
+  // For PromptByte 2.0
+  const [dbComponentName, setDbComponentName] = useState("");
+  const [dbComponentProps, setDbComponentProps] = useState({});
+  const [dbComponentError, setDbComponentError] = useState("");
 
-  const handleGenerateCode = async (prompt: string) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Get current user session
+  const { session } = useAuth();
+
+  const handleGenerateCode = async (prompt) => {
     if (!prompt.trim()) return;
     setLoading(true);
     setHasGenerated(true);
 
+    // Store prompt in Supabase for the logged-in user
     try {
+      if (session?.user?.id) {
+        await storePrompt(prompt, session.user.id);
+      }
       if (mode === "PromptByte 2.0") {
         const { component, props } = parseUserInput(prompt);
         if (component) {
@@ -40,7 +49,7 @@ export const CodeGenerator = () => {
         }
       } else {
         const apiKey =
-          (import.meta as any).env?.VITE_GEMINI_API_KEY ||
+          import.meta.env?.VITE_GEMINI_API_KEY ||
           localStorage.getItem("GEMINI_API_KEY");
 
         if (!apiKey) {
@@ -91,14 +100,12 @@ export const CodeGenerator = () => {
         const data = await response.json();
         const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-        // --- FIX: Improved error handling for an empty response ---
         if (!content || content.trim() === "") {
           throw new Error(
             "The API returned an empty response. Try a different prompt."
           );
         }
 
-        // --- Make the output format better
         const cleanCode = content
           .replace(/```[a-z]*\n?/gi, "")
           .replace(/```$/gi, "")
@@ -130,7 +137,7 @@ export const CodeGenerator = () => {
     }
   };
 
-  const detectLanguage = (prompt: string): string => {
+  const detectLanguage = (prompt) => {
     const lowerPrompt = prompt.toLowerCase();
     if (lowerPrompt.includes("css") || lowerPrompt.includes("style"))
       return "css";
@@ -143,8 +150,7 @@ export const CodeGenerator = () => {
     return "html"; //fallbacks
   };
 
-  // Reset output when switching modes or clearing input
-  const handleModeChange = (newMode: string) => {
+  const handleModeChange = (newMode) => {
     setMode(newMode);
     setHasGenerated(false);
     setOutput({ code: "", language: "bash" });
@@ -152,10 +158,8 @@ export const CodeGenerator = () => {
 
   return (
     <div className="min-h-screen bg-background p-6 relative overflow-hidden">
-      {/* Scanner line effect */}
+      {/* Background Effects */}
       <div className="scanner-line" />
-
-      {/* Matrix background effect */}
       <div className="matrix-bg">
         <div className="absolute inset-0 opacity-10">
           {Array.from({ length: 20 }).map((_, i) => (
@@ -171,11 +175,34 @@ export const CodeGenerator = () => {
         </div>
       </div>
 
+      <button
+        className={`absolute top-6 left-6 z-20 p-2 rounded hover:bg-background/10 focus:outline-none transition-opacity duration-300 ${
+          sidebarOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+        style={{ minWidth: 40 }}
+        aria-label="Open sidebar"
+        onClick={() => setSidebarOpen(true)}
+      >
+        <img
+          src="/menu.svg"
+          alt="Menu"
+          width={24}
+          height={24}
+          className="text-primary"
+        />
+      </button>
+
+      {/* Main Centered Content Container */}
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-        <div className="text-center space-y-4">
-          <h1 className="text-5xl font-bold terminal-text text-primary glitch-text">
+        {/* Simplified Header */}
+        <div className="text-center">
+          <h1 className="text-5xl font-bold terminal-text text-primary glitch-text m-0">
             PROMPTBYTE
           </h1>
+        </div>
+
+        {/* Subtitles */}
+        <div className="text-center">
           <div className="text-xl text-foreground font-mono">
             <span className="text-accent"></span> AI Code Generator Assistant
           </div>
@@ -188,7 +215,9 @@ export const CodeGenerator = () => {
           </p>
         </div>
 
+        {/* Main Two-Column Grid Layout */}
         <div className="grid lg:grid-cols-2 gap-8">
+          {/* Left Column: Input */}
           <div className="space-y-6">
             <div className="bg-card/50 border border-primary/30 rounded-lg p-4 backdrop-blur-sm">
               <div className="flex items-center justify-between mb-2">
@@ -215,7 +244,6 @@ export const CodeGenerator = () => {
                     setDbComponentProps({});
                     setDbComponentError("");
                     try {
-                      // Smart natural language parsing
                       const parsed = parseUserInput(prompt);
                       if (!parsed.component) {
                         setDbComponentError(
@@ -241,6 +269,7 @@ export const CodeGenerator = () => {
             </div>
           </div>
 
+          {/* Right Column: Output */}
           <div className="lg:sticky lg:top-6">
             <div className="bg-card/50 border border-primary/30 rounded-lg backdrop-blur-sm">
               <div className="text-sm text-primary font-mono p-4 border-b border-primary/30">
@@ -280,6 +309,8 @@ export const CodeGenerator = () => {
           </div>
         </div>
       </div>
+      {/* Sidebar Component */}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     </div>
   );
 };
