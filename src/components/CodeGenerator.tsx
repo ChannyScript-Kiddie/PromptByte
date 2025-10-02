@@ -49,18 +49,15 @@ export const CodeGenerator = () => {
           );
         }
 
-        // --- FIX: Using a more specific and direct system instruction ---
         const systemInstruction = {
           parts: [
             {
-              text: `You are a world-class code generator.
-            Your sole purpose is to convert user requests into clean, functional code.
-            You MUST respond ONLY with the complete, modern, and ready-to-use code block.
-            Do NOT include any explanatory text, comments, or JSON wrappers.
-            Always respond with only valid code in the requested language. Do not add explanations, prose, or JSON wrappers.`,
+              text: `You are a world-class code generator. Your sole purpose is to convert user requests into clean, functional code. You MUST respond ONLY with the complete, modern, and ready-to-use code block. Do NOT include any explanatory text, markdown formatting, or JSON wrappers.`,
             },
           ],
         };
+
+        const modifiedPrompt = `${prompt}\n\nIMPORTANT: Do not include any comments, docstrings, or explanatory text in the code. Only provide the raw code itself.`;
 
         const STABLE_MODEL_ALIAS = "gemini-2.5-pro";
 
@@ -72,15 +69,13 @@ export const CodeGenerator = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              // The user's specific prompt
-              contents: [{ parts: [{ text: prompt }] }],
-              // The system's rules and role are now separate
+              contents: [{ parts: [{ text: modifiedPrompt }] }],
               systemInstruction: systemInstruction,
               generationConfig: {
-                temperature: 0.3,
+                temperature: 0.2,
                 topK: 1,
                 topP: 1,
-                maxOutputTokens: 1000,
+                maxOutputTokens: 2048,
               },
             }),
           }
@@ -110,13 +105,11 @@ export const CodeGenerator = () => {
           .trim();
 
         const language = detectLanguage(prompt);
-        const result = {
+
+        setOutput({
           code: cleanCode,
           language,
-          title: `Generated ${language.toUpperCase()} Code`,
-        };
-
-        setOutput(result);
+        });
 
         toast({
           title: "Code Generated!",

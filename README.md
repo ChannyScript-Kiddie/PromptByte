@@ -2,8 +2,6 @@
 
 **PromptByte** is a smart boilerplate code generator that converts natural language descriptions into production-ready, responsive UI components. It eliminates repetitive coding tasks, enabling developers to focus on application logic, rapid prototyping, and consistent UI standards.
 
----
-
 PromptByte generates **production-ready, responsive, and accessible UI components** from simple English descriptions, removing repetitive coding and enabling developers to focus on unique functionality.
 
 ---
