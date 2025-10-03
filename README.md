@@ -54,7 +54,7 @@ PromptByte generates **production-ready, responsive, and accessible UI component
 - npm install
 - npm run dev
 
-Visit http://localhost:5173 to see the app in action.
+Visit https://promptbyte-ai.netlify.app to see the app in action.
 
 License
 PromptByte © 2025
